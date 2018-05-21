@@ -31,6 +31,7 @@ public class FirewatchServer {
                 base += "/";
             }
             proxyServer().addRequestFilter(new CommandFilter(base));
+            proxyServer().newHar();
         }
     }
 

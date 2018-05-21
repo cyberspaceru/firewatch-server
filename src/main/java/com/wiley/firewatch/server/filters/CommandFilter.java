@@ -2,10 +2,9 @@ package com.wiley.firewatch.server.filters;
 
 import com.wiley.firewatch.core.utils.ContentType;
 import com.wiley.firewatch.core.utils.MatchingType;
-import com.wiley.firewatch.core.utils.ResponseFactory;
 import com.wiley.firewatch.core.utils.StringMatcher;
-import com.wiley.firewatch.server.FirewatchServer;
 import com.wiley.firewatch.server.commands.Command;
+import com.wiley.firewatch.server.commands.telemetry.GetPreviewCommand;
 import com.wiley.firewatch.server.commands.telemetry.GetStatusCommand;
 import io.netty.handler.codec.http.*;
 import net.lightbody.bmp.filters.RequestFilter;
@@ -30,6 +29,7 @@ public class CommandFilter implements RequestFilter {
     static {
         COMMANDS = new ArrayList<>();
         COMMANDS.add(new GetStatusCommand());
+        COMMANDS.add(new GetPreviewCommand());
     }
 
     public CommandFilter(String base) {
@@ -42,7 +42,7 @@ public class CommandFilter implements RequestFilter {
         if (url.startsWith(instance().configuration().base())) {
             String significantUrl = url.replace(this.base, "");
             List<Command> matched = COMMANDS.stream()
-                    .filter(x -> StringMatcher.match(significantUrl, MatchingType.EQUALS, x.getPattern().pattern()))
+                    .filter(x -> StringMatcher.match(significantUrl, MatchingType.EQUALS, x.getExpectedPattern().pattern()))
                     .collect(Collectors.toList());
             HttpVersion version = request.getProtocolVersion();
             if (matched.isEmpty()) {

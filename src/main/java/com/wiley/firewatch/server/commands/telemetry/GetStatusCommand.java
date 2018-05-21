@@ -9,12 +9,12 @@ import java.util.regex.Pattern;
 
 public class GetStatusCommand extends Command {
     @Override
-    public Pattern getPattern() {
+    public Pattern getExpectedPattern() {
         return Pattern.compile("status");
     }
 
     @Override
-    public HttpMethod getHttpMethod() {
+    public HttpMethod getExpectedHttpMethod() {
         return HttpMethod.GET;
     }
 
